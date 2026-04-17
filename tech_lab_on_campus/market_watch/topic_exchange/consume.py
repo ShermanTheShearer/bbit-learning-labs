@@ -20,9 +20,8 @@ from solution.consumer_sol import mqConsumer  # pylint: disable=import-error
 def main(sector: str, queueName: str) -> None:
     
     # Implement Logic to Create Binding Key from the ticker and sector variable -  Step 2
-    #
-    #                       WRITE CODE HERE!!!
-    #
+    # Using topic exchange pattern: *.sector.* to match all messages containing the sector
+    bindingKey = f"*.{sector}.*"
     
     consumer = mqConsumer(binding_key=bindingKey,exchange_name="Tech Lab Topic Exchange",queue_name=queueName)    
     consumer.startConsuming()
@@ -32,8 +31,12 @@ def main(sector: str, queueName: str) -> None:
 if __name__ == "__main__":
 
     # Implement Logic to read the sector and queueName string from the command line and save them - Step 1
-    #
-    #                       WRITE CODE HERE!!!
-    #
+    parser = argparse.ArgumentParser(description="RabbitMQ Consumer with Topic Exchange")
+    parser.add_argument("sector", help="The sector to subscribe to (e.g., Technology, Healthcare)")
+    parser.add_argument("queue", help="The name of the queue to create")
+    
+    args = parser.parse_args()
+    sector = args.sector
+    queueName = args.queue
 
-    sys.exit(main(sector,queue))
+    sys.exit(main(sector, queueName))
